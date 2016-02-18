@@ -100,19 +100,19 @@ ph@data[ ,2] = c(array(pData(matriz_log)$"disease.state"))
 colnames(ph@data)[2]="source"
 ph@data
 groups = ph@data$source
-f = factor(groups,levels=c("normal","prostate cancer"))
+f = factor(groups,levels=c("normal","stage I cRCC","stage II cRCC"))
 ## Se crea el modelo necesario para la implementación del método
 design = model.matrix(~ 0 + f)
-colnames(design) = c("normal","prostateCancer")
+colnames(design) = c("normal","stageIcRCC","stageIIcRCC")
 rownames(expresion) <- featureData(matriz_log)$"Gene symbol"
 data.fit = lmFit(expresion,design)
 data.fit$coefficients[1:10,]
 ## Se crea un segundo factor de prueba 
-f2 = factor(groups,levels=c("normal","prostateCance"))
+f2 = factor(groups,levels=c("normal","stageIcRCC","stageIIcRCC"))
 design2 = model.matrix(~ 0 + f2) # y un segundo modelo de prueba
-colnames(design2) = c("normal","prostateCance")
+colnames(design2) = c("normal","stageIcRCC","stageIIcRCC")
 #Se crea la matrix de contraste
-contrast.matrix = makeContrasts(normal - prostateCancer,levels=design2)
+contrast.matrix = makeContrasts(normal - stageIcRCC - stageIIcRCC,levels=design2)
 data.fit.con = contrasts.fit(data.fit,contrast.matrix)
 #Mediante el metodo eBayes se obtienen los genes diferencialmente expresados
 data.fit.eb = eBayes(data.fit.con)
@@ -145,6 +145,7 @@ matrix.genes.dif<-na.omit(matrix.genes.dif[,1:21])
 
 t = as.matrix(matrix.genes.dif)
 
+colnames(t) <- c(groups,"p")
 
 heatmap(t, main = "Heatmap de genes")
 ## y se aplica un algortimo de klustering para el análisis de los datos.
