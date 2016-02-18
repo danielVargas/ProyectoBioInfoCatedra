@@ -13,6 +13,8 @@ library(GEOquery)
 library(plyr)
 library(siggenes)
 library(limma)
+library(amap)
+
 ####################
 
 
