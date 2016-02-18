@@ -149,7 +149,12 @@ t = as.matrix(matrix.genes.dif)
 
 colnames(t) <- c(groups,"p")
 
+heat = as.matrix(matriz_expresion_discriminativos)
+colnames(heat) <- c(groups,"p")
+heatmap(heat, main = "Heatmap de genes")
 heatmap(t, main = "Heatmap de genes")
+
+
 ## y se aplica un algortimo de klustering para el análisis de los datos.
 algoritmoKg <- Kmeans(x = t, centers=2, method="euclidean",iter.max = 100)
 par(mfrow=c(1,2))
