@@ -19,7 +19,8 @@ library(amap)
 
 
 # CARGADO DE DATOS
-db <- getGEO('GDS2881', destdir=".")
+#db <- getGEO('GDS2881', destdir=".")
+db<-getGEO(filename='GDS2881.soft.gz')
 
 # CARGADO DE METADADOS DEL DATASET
 Meta(db)$dataset_id
