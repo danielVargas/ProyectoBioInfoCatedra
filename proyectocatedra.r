@@ -6,6 +6,7 @@
 #biocLite("plyr")
 #biocLite("siggenes")
 #biocLite("limma")
+#biocLite("amap")
 # http://www.johnverostek.com/wp-content/uploads/2014/02/ISLR-First-Printing_CH10-Clustering.pdf
 library("ISLR")
 #################
