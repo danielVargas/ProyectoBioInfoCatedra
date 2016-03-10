@@ -159,14 +159,108 @@ t <- t[ , sort(groups)]
 colnames(t) <- sort(groups)
 heatmap(t, main = "Heatmap de genes")
 
-
+##############################################################################################3
+#### ARREGLOS SOLICITADOS POR EL PROFESOR
 ## y se aplica un algortimo de klustering para el anÃ¡lisis de los datos.
-algoritmoKg <- Kmeans(x = t, centers=2, method="euclidean",iter.max = 100)
+matriz_expresion_discriminativoskluster = as.matrix(matriz_expresion_discriminativos)
+algoritmoKg <- Kmeans(x = matriz_expresion_discriminativoskluster, centers=4, method="euclidean",iter.max = 100)
 par(mfrow=c(1,2))
-grafico<-plot(t, col = algoritmoKg$cluster,
+grafico<-plot(matriz_expresion_discriminativoskluster, col = algoritmoKg$cluster,
               type='n', main="K-means en genes")
 points(algoritmoKg$centers, col = c("green","blue"), pch = 15, cex = 1)
-text(t, labels=rownames(t),
+text(matriz_expresion_discriminativoskluster, labels=rownames(matriz_expresion_discriminativoskluster),
      col=algoritmoKg$cluster)
+
+
+matrizCluster = as.matrix(algoritmoKg$cluster)
+grupos = rownames(matrizCluster)
+grupo1 = data.frame(c())
+grupo1Names = c()
+grupo2 = data.frame(c())
+grupo2Names = c()
+grupo3 = data.frame(c())
+grupo3Names = c()
+grupo4 = data.frame(c())
+grupo4Names = c()
+i=1
+for (variable in matrizCluster){
+   if (variable == 1){
+      grupo1= rbind(grupo1, matriz_expresion_discriminativos[grupos[i],])
+      grupo1Names = c(grupo1Names,grupos[i])
+   }
+  if (variable == 2){
+    grupo2= rbind(grupo2, matriz_expresion_discriminativos[grupos[i],])
+    grupo2Names = c(grupo2Names,grupos[i])
+  }
+  if (variable == 3){
+    grupo3= rbind(grupo3, matriz_expresion_discriminativos[grupos[i],])
+    grupo3Names = c(grupo3Names,grupos[i])
+  }
+  if (variable == 4){
+    grupo4= rbind(grupo4, matriz_expresion_discriminativos[grupos[i],])
+    grupo4Names = c(grupo4Names,grupos[i])
+  }
+  i= i +1
+}
+
+grupo1<-grupo1[ ,-21]
+heat = as.matrix(grupo1)
+heatmap(heat, main = "Heatmap de Grupo1")
+grupo2<-grupo2[ ,-21]
+heat = as.matrix(grupo2)
+heatmap(heat, main = "Heatmap de Grupo2")
+grupo3<-grupo3[ ,-21]
+heat = as.matrix(grupo3)
+heatmap(heat, main = "Heatmap de Grupo3")
+grupo4<-grupo4[ ,-21]
+heat = as.matrix(grupo4)
+heatmap(heat, main = "Heatmap de Grupo4")
+
+########################################################################################################
+#LIMMA
+###########
+groups = grupo1Names
+f = factor(groups,levels=c("normal","stage I cRCC","stage II cRCC"))
+## Se crea el modelo necesario para la implementación del métoMCF7Areprodo
+design = model.matrix(~ 0 + f)
+colnames(design) = c("normal","stageIcRCC","stageIIcRCC")
+colnames(grupo1) <- c(groups)
+
+data.fit = lmFit(grupo1,design)
+data.fit$coefficients[1:10,]
+
+#####
+
+## Se crea un segundo factor de prueba 
+f2 = factor(groups,levels=c("normal","stageIcRCC","stageIIcRCC"))
+design2 = model.matrix(~ 0 + f2) # y un segundo modelo de prueba
+colnames(design2) = c("normal","stageIcRCC","stageIIcRCC")
+#Se crea la matrix de contraste
+contrast.matrix = makeContrasts(normal - stageIcRCC - stageIIcRCC,levels=design2)
+data.fit.con = contrasts.fit(data.fit,contrast.matrix)
+#Mediante el metodo eBayes se obtienen los genes diferencialmente expresados
+data.fit.eb = eBayes(data.fit.con)
+names(data.fit.eb)
+
+data.fit.eb$coefficients[1:10,]
+
+data.fit.eb$t[1:10,]
+
+
+## Se trabajan loS datos para poder mostrarlos mÃ¡s ordenandamente
+data.fit.eb$p.value[1:10,]
+temp = data.matrix(data.fit.eb$p.value)
+temp = temp[order(temp)]
+temp[1:10]
+temp = data.matrix(temp)
+colnames(temp) <-  c("p-value")
+temp[1:10]
+summary(temp)
+## Finalmene se seleciconan los genes mÃ¡s diferencialmente expresados.
+temp =topTable(data.fit.eb, adjust = "fdr")
+results <- decideTests(data.fit.eb)
+
+
+
 #########################################################################################################
 
