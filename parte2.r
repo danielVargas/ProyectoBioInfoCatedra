@@ -217,9 +217,9 @@ heat = as.matrix(grupo4)
 heatmap(heat, main = "Heatmap de Grupo4")
 
 ########################################################################################################
-#LIMMA
+#LIMMA GRUPO1
 ###########
-groups = grupo1Names
+groups = colnames(matriz_expresion_discriminativoskluster)
 f = factor(groups,levels=c("normal","stage I cRCC","stage II cRCC"))
 ## Se crea el modelo necesario para la implementación del métoMCF7Areprodo
 design = model.matrix(~ 0 + f)
@@ -260,7 +260,142 @@ summary(temp)
 temp =topTable(data.fit.eb, adjust = "fdr")
 results <- decideTests(data.fit.eb)
 
+#########################################################################################################
+
+########################################################################################################
+#LIMMA GRUPO2
+###########
+f = factor(groups,levels=c("normal","stage I cRCC","stage II cRCC"))
+## Se crea el modelo necesario para la implementación del métoMCF7Areprodo
+design = model.matrix(~ 0 + f)
+colnames(design) = c("normal","stageIcRCC","stageIIcRCC")
+colnames(grupo2) <- c(groups)
+
+data.fit = lmFit(grupo2,design)
+data.fit$coefficients[1:10,]
+
+#####
+
+## Se crea un segundo factor de prueba 
+f2 = factor(groups,levels=c("normal","stageIcRCC","stageIIcRCC"))
+design2 = model.matrix(~ 0 + f2) # y un segundo modelo de prueba
+colnames(design2) = c("normal","stageIcRCC","stageIIcRCC")
+#Se crea la matrix de contraste
+contrast.matrix = makeContrasts(normal - stageIcRCC - stageIIcRCC,levels=design2)
+data.fit.con = contrasts.fit(data.fit,contrast.matrix)
+#Mediante el metodo eBayes se obtienen los genes diferencialmente expresados
+data.fit.eb = eBayes(data.fit.con)
+names(data.fit.eb)
+
+data.fit.eb$coefficients[1:10,]
+
+data.fit.eb$t[1:10,]
+
+
+## Se trabajan loS datos para poder mostrarlos mÃ¡s ordenandamente
+data.fit.eb$p.value[1:10,]
+temp = data.matrix(data.fit.eb$p.value)
+temp = temp[order(temp)]
+temp[1:10]
+temp = data.matrix(temp)
+colnames(temp) <-  c("p-value")
+temp[1:10]
+summary(temp)
+## Finalmene se seleciconan los genes mÃ¡s diferencialmente expresados.
+temp =topTable(data.fit.eb, adjust = "fdr")
+results <- decideTests(data.fit.eb)
 
 
 #########################################################################################################
 
+########################################################################################################
+#LIMMA GRUPO3
+###########
+f = factor(groups,levels=c("normal","stage I cRCC","stage II cRCC"))
+## Se crea el modelo necesario para la implementación del métoMCF7Areprodo
+design = model.matrix(~ 0 + f)
+colnames(design) = c("normal","stageIcRCC","stageIIcRCC")
+colnames(grupo3) <- c(groups)
+
+data.fit = lmFit(grupo3,design)
+data.fit$coefficients[1:10,]
+
+#####
+
+## Se crea un segundo factor de prueba 
+f2 = factor(groups,levels=c("normal","stageIcRCC","stageIIcRCC"))
+design2 = model.matrix(~ 0 + f2) # y un segundo modelo de prueba
+colnames(design2) = c("normal","stageIcRCC","stageIIcRCC")
+#Se crea la matrix de contraste
+contrast.matrix = makeContrasts(normal - stageIcRCC - stageIIcRCC,levels=design2)
+data.fit.con = contrasts.fit(data.fit,contrast.matrix)
+#Mediante el metodo eBayes se obtienen los genes diferencialmente expresados
+data.fit.eb = eBayes(data.fit.con)
+names(data.fit.eb)
+
+data.fit.eb$coefficients[1:10,]
+
+data.fit.eb$t[1:10,]
+
+
+## Se trabajan loS datos para poder mostrarlos mÃ¡s ordenandamente
+data.fit.eb$p.value[1:10,]
+temp = data.matrix(data.fit.eb$p.value)
+temp = temp[order(temp)]
+temp[1:10]
+temp = data.matrix(temp)
+colnames(temp) <-  c("p-value")
+temp[1:10]
+summary(temp)
+## Finalmene se seleciconan los genes mÃ¡s diferencialmente expresados.
+temp =topTable(data.fit.eb, adjust = "fdr")
+results <- decideTests(data.fit.eb)
+
+
+#########################################################################################################
+
+########################################################################################################
+#LIMMA GRUPO4
+###########
+f = factor(groups,levels=c("normal","stage I cRCC","stage II cRCC"))
+## Se crea el modelo necesario para la implementación del métoMCF7Areprodo
+design = model.matrix(~ 0 + f)
+colnames(design) = c("normal","stageIcRCC","stageIIcRCC")
+colnames(grupo4) <- c(groups)
+
+data.fit = lmFit(grupo4,design)
+data.fit$coefficients[1:10,]
+
+#####
+
+## Se crea un segundo factor de prueba 
+f2 = factor(groups,levels=c("normal","stageIcRCC","stageIIcRCC"))
+design2 = model.matrix(~ 0 + f2) # y un segundo modelo de prueba
+colnames(design2) = c("normal","stageIcRCC","stageIIcRCC")
+#Se crea la matrix de contraste
+contrast.matrix = makeContrasts(normal - stageIcRCC - stageIIcRCC,levels=design2)
+data.fit.con = contrasts.fit(data.fit,contrast.matrix)
+#Mediante el metodo eBayes se obtienen los genes diferencialmente expresados
+data.fit.eb = eBayes(data.fit.con)
+names(data.fit.eb)
+
+data.fit.eb$coefficients[1:10,]
+
+data.fit.eb$t[1:10,]
+
+
+## Se trabajan loS datos para poder mostrarlos mÃ¡s ordenandamente
+data.fit.eb$p.value[1:10,]
+temp = data.matrix(data.fit.eb$p.value)
+temp = temp[order(temp)]
+temp[1:10]
+temp = data.matrix(temp)
+colnames(temp) <-  c("p-value")
+temp[1:10]
+summary(temp)
+## Finalmene se seleciconan los genes mÃ¡s diferencialmente expresados.
+temp =topTable(data.fit.eb, adjust = "fdr")
+results <- decideTests(data.fit.eb)
+
+
+#########################################################################################################
