@@ -216,6 +216,10 @@ grupo4<-grupo4[ ,-21]
 heat = as.matrix(grupo4)
 heatmap(heat, main = "Heatmap de Grupo4")
 
+### NORMALIDAD
+require(nortest)
+pearson <- pearson.test(grupo1)$p.value;
+
 ########################################################################################################
 #LIMMA GRUPO1
 ###########
@@ -399,3 +403,16 @@ results <- decideTests(data.fit.eb)
 
 
 #########################################################################################################
+
+
+
+##############################################################################################3
+#### ARREGLOS SOLICITADOS POR EL PROFESOR
+## y se aplica un algortimo de klustering para el análisis de los datos.
+algoritmoKgnuevo <- Kmeans(x = matriz_expresion_discriminativoskluster, centers=7, method="euclidean",iter.max = 100)
+par(mfrow=c(1,2))
+grafico2<-plot(matriz_expresion_discriminativoskluster, col = algoritmoKgnuevo$cluster,
+              type='n', main="K-means en genes")
+points(algoritmoKgnuevo$centers, col = c("green","blue"), pch = 15, cex = 1)
+text(matriz_expresion_discriminativoskluster, labels=rownames(matriz_expresion_discriminativoskluster),
+     col=algoritmoKgnuevo$cluster)
