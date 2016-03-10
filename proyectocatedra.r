@@ -128,7 +128,7 @@ NEC60.matriz_expresion_promedio[1:10,1:6]
 #Si p > alfa no se rechaza la hipótesis nula (H0).
 #Obtengo p.value desde Test t, variables: NORMAL(muestra 14-21) y CANCER (muestra 1-13)
 #El 1, indica que se aplica a nivel de filas.
-pvals=apply(NEC60.matriz_expresion_promedio,1,function(x) {t.test(x[14:21],x[1:13])$p.value})
+pvals=apply(NEC60.matriz_expresion_promedio,1,function(x) {t.test(x[14:21],x[1:13],)$p.value})
 #Asignar p.value al gen correspondiente
 NEC60.matriz_expresion_promedio$p <- pvals
 #Ordenar de - a + la matriz de acuerdo al p.value de cada gen.
@@ -145,7 +145,7 @@ f = factor(groups,levels=c("RENAL","CNS","BREAST","NSCLC","UNKNOWN","OVARIAN","M
 ## Se crea el modelo necesario para la implementación del métoMCF7Areprodo
 design = model.matrix(~ 0 + f)
 colnames(design) =c("RENAL","CNS","BREAST","NSCLC","UNKNOWN","OVARIAN","MELANOMA","PROSTATE","LEUKEMIA","K562Brepro","K562Arepro","COLON","MCF7Arepro","MCF7Drepro")
-NEC60.matriz_expresion_discriminativos_sinp<-NEC60.matriz_expresion_discriminativos[ ,-65]
+NEC60.matriz_expresion_discriminativos_sinp<-NEC60.matriz_expresion_promedio[ ,-65]
 colnames(NEC60.matriz_expresion_discriminativos_sinp) <- c(groups)
 
 data.fit = lmFit(NEC60.matriz_expresion_discriminativos_sinp,design)
@@ -189,8 +189,11 @@ for (variable in rownames(temp)) {
   matrix.genes.dif = rbind(matrix.genes.dif, NEC60.matriz_expresion_promedio[variable,])
   #print(NEC60.matriz_expresion_promedio[variable,])
 }
-matrix.genes.dif<-na.omit(matrix.genes.dif[,1:21])
 
-t = as.matrix(matrix.genes.dif)
+matrix.genes.difsinp<-matrix.genes.dif[ ,-65]
+colnames(matrix.genes.difsinp) <- groups
+matrix.genes.difsinp <- matrix.genes.difsinp[ , sort(groups)]
+colnames(matrix.genes.difsinp) <- sort(groups)
+t = as.matrix(matrix.genes.difsinp)
 
 heatmap(t, main = "Heatmap de genes")

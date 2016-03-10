@@ -19,8 +19,8 @@ library(amap)
 
 
 # CARGADO DE DATOS
-#db <- getGEO('GDS2881', destdir=".")
-db<-getGEO(filename='GDS2881.soft.gz')
+db <- getGEO('GDS2881', destdir=".")
+#db<-getGEO(filename='GDS2881.soft.gz')
 
 # CARGADO DE METADADOS DEL DATASET
 Meta(db)$dataset_id
@@ -87,7 +87,7 @@ colnames(matriz_expresion_discriminativos) <- c(array(pData(matriz_log)$"disease
 ########################################################################################################
 
 
-### LIMMMA
+### LIMMMAZ
 #El paquete limma contiene funciones para el uso de t-test y ANOVA para identificar 
 #la expresión diferencial de los datos de microarrays. Estas funciones se pueden utilizar
 #para las plataformas de toda gama y trabajan incluso para los datos de microarrays con 
@@ -152,7 +152,11 @@ colnames(t) <- c(groups,"p")
 
 heat = as.matrix(matriz_expresion_discriminativos)
 colnames(heat) <- c(groups,"p")
+heat<-heat[ ,-21]
 heatmap(heat, main = "Heatmap de genes")
+t<-t[ ,-21]
+t <- t[ , sort(groups)]
+colnames(t) <- sort(groups)
 heatmap(t, main = "Heatmap de genes")
 
 
