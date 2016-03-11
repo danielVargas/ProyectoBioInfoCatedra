@@ -162,14 +162,15 @@ heatmap(t, main = "Heatmap de genes")
 ##############################################################################################3
 #### ARREGLOS SOLICITADOS POR EL PROFESOR
 ## y se aplica un algortimo de klustering para el análisis de los datos.
+
 matriz_expresion_discriminativoskluster = as.matrix(matriz_expresion_discriminativos)
-algoritmoKg <- Kmeans(x = matriz_expresion_discriminativoskluster, centers=4, method="euclidean",iter.max = 100)
-par(mfrow=c(1,2))
-grafico<-plot(matriz_expresion_discriminativoskluster, col = algoritmoKg$cluster,
-              type='n', main="K-means en genes")
-points(algoritmoKg$centers, col = c("green","blue"), pch = 15, cex = 1)
-text(matriz_expresion_discriminativoskluster, labels=rownames(matriz_expresion_discriminativoskluster),
-     col=algoritmoKg$cluster)
+algoritmoKg <- Kmeans(x = matriz_expresion_discriminativoskluster, centers=4, method="kendall",iter.max = 100)
+# using package ade4
+library(ade4)
+pca    <-prcomp(matriz_expresion_discriminativoskluster, scale.=T, retx=T)  # principal components analysis
+plot.df <- cbind(pca$x[,1], pca$x[,2]) # first and second PC
+coul <- c("black", "red", "green", "blue")
+s.class(plot.df, factor(algoritmoKg$cluster),col = coul)
 
 
 matrizCluster = as.matrix(algoritmoKg$cluster)
@@ -417,7 +418,7 @@ results <- decideTests(data.fit.eb)
 ##############################################################################################3
 #### ARREGLOS SOLICITADOS POR EL PROFESOR
 ## y se aplica un algortimo de klustering para el análisis de los datos.
-algoritmoKgnuevo <- Kmeans(x = matriz_expresion_discriminativoskluster, centers=9, method="euclidean",iter.max = 100)
+algoritmoKgnuevo <- Kmeans(x = matriz_expresion_discriminativoskluster, centers=4, method="kendall",iter.max = 100)
 par(mfrow=c(1,2))
 grafico2<-plot(matriz_expresion_discriminativoskluster, col = algoritmoKgnuevo$cluster,
               type='n', main="K-means en genes")
