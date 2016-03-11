@@ -164,13 +164,13 @@ heatmap(t, main = "Heatmap de genes")
 ## y se aplica un algortimo de klustering para el análisis de los datos.
 
 matriz_expresion_discriminativoskluster = as.matrix(matriz_expresion_discriminativos)
-algoritmoKg <- Kmeans(x = matriz_expresion_discriminativoskluster, centers=4, method="kendall",iter.max = 100)
+algoritmoKg <- Kmeans(x = matriz_expresion_discriminativoskluster, centers=4, method="kendall",iter.max = 500)
 # using package ade4
-library(ade4)
+#library(ade4)
 pca    <-prcomp(matriz_expresion_discriminativoskluster, scale.=T, retx=T)  # principal components analysis
 plot.df <- cbind(pca$x[,1], pca$x[,2]) # first and second PC
 coul <- c("black", "red", "green", "blue")
-s.class(plot.df, factor(algoritmoKg$cluster),col = coul,sub="Klustering",possub = "topleft")
+s.class(plot.df, factor(algoritmoKg$cluster),col = coul,sub="K-means 4",possub = "topleft")
 
 
 matrizCluster = as.matrix(algoritmoKg$cluster)
