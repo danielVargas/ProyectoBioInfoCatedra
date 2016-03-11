@@ -418,10 +418,10 @@ results <- decideTests(data.fit.eb)
 ##############################################################################################3
 #### ARREGLOS SOLICITADOS POR EL PROFESOR
 ## y se aplica un algortimo de klustering para el análisis de los datos.
-algoritmoKgnuevo <- Kmeans(x = matriz_expresion_discriminativoskluster, centers=9, method="pearson",iter.max = 1000)
+algoritmoKgnuevo <- Kmeans(x = matriz_expresion_discriminativoskluster, centers=5, method="pearson",iter.max = 1000)
 
 #library(ade4)
 pca    <-prcomp(matriz_expresion_discriminativoskluster, scale.=T, retx=T)  # principal components analysis
 plot.df <- cbind(pca$x[,1], pca$x[,2]) # first and second PC
 coul <- c("black", "red", "green", "blue","yellow","orange","pink","brown","grey")
-s.class(plot.df, factor(algoritmoKgnuevo$cluster),col = coul,sub="K-means 9",possub = "topleft")
+s.class(plot.df, factor(algoritmoKgnuevo$cluster),col = coul,sub="K-means 5",possub = "topleft")
