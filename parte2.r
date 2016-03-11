@@ -170,7 +170,7 @@ library(ade4)
 pca    <-prcomp(matriz_expresion_discriminativoskluster, scale.=T, retx=T)  # principal components analysis
 plot.df <- cbind(pca$x[,1], pca$x[,2]) # first and second PC
 coul <- c("black", "red", "green", "blue")
-s.class(plot.df, factor(algoritmoKg$cluster),col = coul)
+s.class(plot.df, factor(algoritmoKg$cluster),col = coul,sub="Klustering",possub = "topleft")
 
 
 matrizCluster = as.matrix(algoritmoKg$cluster)
@@ -418,10 +418,10 @@ results <- decideTests(data.fit.eb)
 ##############################################################################################3
 #### ARREGLOS SOLICITADOS POR EL PROFESOR
 ## y se aplica un algortimo de klustering para el análisis de los datos.
-algoritmoKgnuevo <- Kmeans(x = matriz_expresion_discriminativoskluster, centers=4, method="kendall",iter.max = 100)
-par(mfrow=c(1,2))
-grafico2<-plot(matriz_expresion_discriminativoskluster, col = algoritmoKgnuevo$cluster,
-              type='n', main="K-means en genes")
-points(algoritmoKgnuevo$centers, col = c("green","blue"), pch = 15, cex = 1)
-text(matriz_expresion_discriminativoskluster, labels=rownames(matriz_expresion_discriminativoskluster),
-     col=algoritmoKgnuevo$cluster)
+algoritmoKgnuevo <- Kmeans(x = matriz_expresion_discriminativoskluster, centers=9, method="kendall",iter.max = 100)
+
+#library(ade4)
+pca    <-prcomp(matriz_expresion_discriminativoskluster, scale.=T, retx=T)  # principal components analysis
+plot.df <- cbind(pca$x[,1], pca$x[,2]) # first and second PC
+coul <- c("black", "red", "green", "blue")
+s.class(plot.df, factor(algoritmoKgnuevo$cluster),col = coul,sub="K-means 9",possub = "topleft")
